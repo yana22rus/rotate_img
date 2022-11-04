@@ -1,5 +1,4 @@
 import os
-from getpass import getuser
 from uuid import uuid4
 
 from PIL import Image
@@ -12,9 +11,16 @@ app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join("img")
 
 app.secret_key = "426a0a76-5477-41bd-a225-7f0d4b835f1a"
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:////home/{getuser()}/main.sqlite'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1042 * 1042
+
+
+def img_rotate(name_file, degree_rotation):
+    img = Image.open(os.path.join("static", "img", name_file))
+
+    rotated = img.rotate(degree_rotation)
+
+    rotated.save(os.path.join("static", "img", name_file))
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -49,18 +55,10 @@ def rotate(id):
 
     if request.method == "POST":
         if request.form["btn"] == "Влево":
-            img = Image.open(os.path.join("static", "img", name_file))
-
-            rotated = img.rotate(90)
-
-            rotated.save(os.path.join("static", "img", name_file))
+            img_rotate(name_file, 90)
 
         if request.form["btn"] == "Вправо":
-            img = Image.open(os.path.join("static", "img", name_file))
-
-            rotated = img.rotate(-90)
-
-            rotated.save(os.path.join("static", "img", name_file))
+            img_rotate(name_file, -90)
 
     return render_template("rotate.htm", img=name_file)
 
