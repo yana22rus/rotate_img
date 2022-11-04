@@ -1,0 +1,5 @@
+*.png
+*.db
+venv/
+.idea/
+db/__pycache__/
