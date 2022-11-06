@@ -42,12 +42,12 @@ def upload():
 
         data_id = cursor.fetchone()[0]
 
-        return redirect(f"/rotate/{data_id}")
+        return redirect(f"/rotate_python/{data_id}")
 
     return render_template("upload.htm")
 
 
-@app.route("/rotate/<int:id>", methods=["GET", "POST"])
+@app.route("/rotate_python/<int:id>", methods=["GET", "POST"])
 def rotate(id):
     cursor.execute(f"""SELECT name_file FROM img WHERE id='{id}'""")
 
@@ -61,6 +61,15 @@ def rotate(id):
             img_rotate(name_file, -90)
 
     return render_template("rotate.htm", img=name_file)
+
+
+@app.route("/rotate_js/<int:id>", methods=["GET", "POST"])
+def rotate_ks(id):
+    cursor.execute(f"""SELECT name_file FROM img WHERE id='{id}'""")
+
+    name_file = cursor.fetchone()[0]
+
+    return render_template("rotate_js.htm", img=name_file)
 
 
 if __name__ == "__main__":
